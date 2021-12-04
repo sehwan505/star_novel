@@ -10,9 +10,9 @@ const AppRouter = () => {
   return (
     <Router>
       <ToastContainer
-            style={{ fontSize: "1.3rem", width: "85%" }}
-            autoClose="2000"
-            position="top-center"
+        // style={{ fontSize: "1.3rem", width: "85%" }}
+        // autoClose="2000"
+        // position="top-center"
       />
       <Switch>
         <Route exact path="/">

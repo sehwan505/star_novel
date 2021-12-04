@@ -6,9 +6,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 function RelativeStarButton(props){
     const history = useHistory();
-
     function handleClick(starId) {
-        console.log(starId);
         if (starId !== undefined){
             history.push(`/detail/${starId}`);
         }
@@ -39,13 +37,13 @@ function RelativeStarButton(props){
                                             "cursor":"pointer",
                                             "fontSize":`${link.size}px`,
                                             "position":"absolute",
-                                            "left": `${(link.location.x - props.location.x) / 2}px`,
-                                            "top": `${(link.location.y - props.location.y) / 2}px`,
+                                            "left": `${(link.x - props.x) / 2}px`,
+                                            "top": `${(link.y - props.y) / 2}px`,
                                             "filter": "drop-shadow(0 0 5px white)",
                                             "zIndex": 10
                                             }}/>
 
-                            <Line from={{x: 0, y: 0}} to={{x : (link.location.x - props.location.x) / 2, y: (link.location.y - props.location.y) / 2}} fromSize={0} toSize={link.size}/>
+                            <Line fromX={0}  fromY={0} toX={(link.x - props.x) / 2} toY={(link.y - props.y) / 2} fromSize={0} toSize={link.size}/>
                         </div>
                     )
                 })

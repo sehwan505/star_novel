@@ -6,7 +6,7 @@ import axios from "axios";
 import '../../css/editor.css';
 import {useHistory} from "react-router-dom";
 
-const DraftEditor = ({user, handleLogout}) => {
+const DraftEditor = ({starId}) => {
   const editorRef = React.createRef();
   const [postTitle , setPostTitle] = useState("");
   const [hashtag, setHashtag] = useState("");
@@ -29,22 +29,35 @@ const DraftEditor = ({user, handleLogout}) => {
     }
     const header = {
       headers: {
-        'Authorization' : `JWT ${localStorage.getItem('token')}`	
+        headers: {'Content-Type': 'application/json'}	
       }
     }
-    axios.post('http://127.0.0.1:8000/add/', {
+    if (starId)
+    {      
+      axios.post('http://127.0.0.1:8000/boards/link_star', {
+          title: postTitle,
+          story: editorRef.current.getInstance().getMarkdown(),
+          starId: starId
+      }, header).then((response) => {
+        history.push('/');
+      })
+      .catch((error) => {
+        toast.error("오류가 발생했습니다.");
+        console.log(error);
+      })
+    }
+    else{
+      axios.post('http://127.0.0.1:8000/boards/', {
         title: postTitle,
-        content: editorRef.current.getInstance().getMarkdown(),
-        writer_id: user.user_pk,
-        writer_name: user.username,
-        hashtag : hashtag,
-    }, header).then((response) => {
-	    history.push('/');
-    })
-    .catch((error) => {
-      toast.error("오류가 발생했습니다.");
-      console.log(error);
-	  })
+        story: editorRef.current.getInstance().getMarkdown(),
+      }, header).then((response) => {
+        history.push('/');
+      })
+      .catch((error) => {
+        toast.error("오류가 발생했습니다.");
+        console.log(error);
+      })
+    }
   }
 
   const onChangeTitle = (event) => {
@@ -65,7 +78,15 @@ const DraftEditor = ({user, handleLogout}) => {
   return (
     <>
     <div className="editor">
-      <h1 className="input_title">글쓰기</h1>
+      {starId ? 
+      <>
+        <h1 className="input_title">별자리 연결하기</h1>
+      </>
+      :
+      <>
+        <h1 className="input_title">글쓰기</h1>
+      </>
+      }
       <hr/>
       <div>
         <div className="inputbox">

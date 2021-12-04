@@ -4,7 +4,6 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import RelativeStarButton from "../components/RelativeStarButton";
 import TimeForToday from "../components/TimeForToday";
-import Pagination from "../components/Pagination";
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table'
@@ -15,16 +14,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 
 function Detail({post_id}){
-  const [commentContent , setCommentContent] = useState("");
-  // const [post, setPost] = useState([]);
-  const [comment, setComment] = useState([]);
-  const [pageNum, setPageNum] = useState(localStorage.getItem('pageNum') ? localStorage.getItem('pageNum') : 1);
-  const [itemsCount, setItemsCount] = useState(0);
-  const [commentItemsCount, setCommentItemsCount] = useState(0);
-  const [commentPageNum, setCommentPageNum] = useState(1);
+  const [post, setPost] = useState([]);
+  const [links, setLinks] = useState([]);
   const history = useHistory();
   const id = post_id.match.params.id;
-  const post = {'id': 1, 'size': 30, 'location': {'x' : 10, 'y' : 30}, 'links':[{'id' : 2, 'size': 20, 'location' : {'x':40, 'y':20}}, {'id' : 3, 'size': 20,'location':{'x':100, 'y':300}}]};
+  // const post = {'id': 1, 'size': 30, 'location': {'x' : 10, 'y' : 30}, 'links':[{'id' : 2, 'size': 20, 'location' : {'x':40, 'y':20}}, {'id' : 3, 'size': 20,'location':{'x':100, 'y':300}}]};
 
 
   const useStyles = makeStyles(theme => ({
@@ -40,59 +34,35 @@ function Detail({post_id}){
 
   
   useEffect(async() => {
-		// TableRowy {
-		// 	window.scrollTo(0,0);
-		// 	const res = await fetch(`https://127.0.0.1:8000/api/post/detail/${id}/`)
-		// 	const posts = await res.json()
-		// 	setPost(posts);
-		// 	if (commentPageNum === 1){
-		// 		fetchComment();
-		// 	}
-		// 	else{
-		// 		setCommentPageNum(1);
-		// 	}
-		// }
-		// catch (e) {
-		// 	console.log(e);
-		// }
+		try {
+			window.scrollTo(0,0);
+			const res = await fetch(`http://127.0.0.1:8000/boards/${id}/`,{
+          headers: {'Content-Type': 'application/json'},
+          method: 'GET'
+        })
+			const posts = await res.json()
+      console.log(posts);
+			setPost(posts[0]);
+      setLinks(posts[1]);
+		}
+		catch (e) {
+			console.log(e);
+		}
 
   }, [post_id]);
 
-  useEffect(async() => {
-    try{
-      const res1 = await fetch(`https://127.0.0.1:8000/api/post/section/?page=${pageNum}`);
-      const post_list = await res1.json();
-      if (res1.status === 404){
-        toast.error("오류, 새로고침 해주세요");
-        history.push('/');
-      }
-      setItemsCount(post_list.count);
-      setPostList(post_list.results);
-    }
-    catch(e){
-      console.log(e);
-    }
-  },[pageNum]);
-
-
-
   const onDeleteClick = async () => {
     const ok = window.confirm("진짜 지우시겠습니까?");
-    if (parseInt(post.writer_id) !== parseInt(user.user_pk))
-      return ;
     if (ok) {
-      const header = {
-        headers: {
-          'Authorization' : `JWT ${localStorage.getItem('token')}`	
-        }
-      }
-      await axios.post(`https://127.0.0.1:8000/api/post/delete_post/${id}/`, {
-      }, header).then(() => {
+      axios.delete(`http://127.0.0.1:8000/boards/${id}/`, {
+      }, {
+        headers: {'Content-Type': 'application/json'}
+      }).then(() => {
         toast.success('삭제 완료');
         history.push('/');
       })
       .catch((error) => {
-        console.log(error);
+        history.push('/');
       })
     }
   };
@@ -106,7 +76,7 @@ function Detail({post_id}){
               <TableBody>
               <TableRow>
                 <TableCell className={classes.cell}>
-                  {post.title}bca
+                  {post.title}
                 </TableCell>
                 <TableCell style={{float:"right"}} className={classes.cell}>
                   {TimeForToday(post.created_at)}
@@ -115,7 +85,7 @@ function Detail({post_id}){
               <TableRow size="small">
                 <TableCell className={classes.cell}>
                     <label>
-                      {post.writer_name}abc
+                      작성자A
                     </label>
                 </TableCell>
                 <TableCell style={{float:"right"}} className={classes.cell}>
@@ -123,7 +93,7 @@ function Detail({post_id}){
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan="2" className={classes.cell}>{post.content}</TableCell>
+                <TableCell colSpan="2" className={classes.cell}>{post.story}</TableCell>
               </TableRow>
               <TableRow>
                 {/* <TableCell colSpan="2">
@@ -134,7 +104,7 @@ function Detail({post_id}){
             </Table>
             </TableContainer>
             <div>
-              <RelativeStarButton key={post.id} starId={post.id} location={post.location} links={post.links} size={post.size}/>
+              <RelativeStarButton key={post.id} starId={post.id} x={post.x} y={post.y} links={links} size={post.size}/>
             </div>
         </div>
       </div>

@@ -293,4 +293,5 @@ span.submit{
     float: right;
     text-align: center;
     border-radius: 5px;
+    cursor: pointer;
 }

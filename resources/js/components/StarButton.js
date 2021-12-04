@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Line from "./Line";
-import Box from "@material-ui/core/Box";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Tooltip from "@material-ui/core/Tooltip";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 function StarButton(props){
@@ -17,35 +17,22 @@ function StarButton(props){
     };
 
     return(
-        <>
-            <div onClick={() => {handleClick(props.starId);}} onMouseEnter={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}}>
+        <> 
+            <Tooltip title={props.title}>
+            <div onClick={() => {handleClick(props.starId);}}>
                 <FontAwesomeIcon icon={faStar} style={{"backgroundColor": "rgba( 255, 255, 255, 0 )", 
                                    "color":"white",
                                    "cursor":"pointer",
                                    "fontSize":`${props.size}px`,
                                    "position":"absolute",
-                                   "left":`${props.location.x}px`,
-                                   "top":`${props.location.y}px`,
+                                   "left":`${props.x}px`,
+                                   "top":`${props.y}px`,
                                    "filter": "drop-shadow(0 0 5px white)"
                                    }}/>
             </div>
+            </Tooltip>
             {props.links && 
-                props.links.map((link) => <Line from={props.location} to={link.location} fromSize={props.size} toSize={link.size}/>)
-            }
-            {hover && 
-                <>
-                    <Box
-                        sx={{
-                            width: 300,
-                            height: 300,
-                            backgroundColor: 'primary.dark',
-                            '&:hover': {
-                            backgroundColor: 'primary.main',
-                            opacity: [0.9, 0.8, 0.7],
-                            },
-                        }}
-                        />
-                </>
+                props.links.map((link) => <Line fromX={props.x} fromY={props.y} toX={link.x} toY={link.y}  fromSize={props.size} toSize={link.size}/>)
             }
         </>
     );

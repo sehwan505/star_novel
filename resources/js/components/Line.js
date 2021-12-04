@@ -1,21 +1,25 @@
 function Line(props){
-    let from = props.from;
+    let fromX = props.fromX;
+    let fromY = props.fromY;
     let fromSize = props.fromSize / 2;
-    let to = props.to;
+    let toX = props.toX;
+    let toY = props.toY;
     let toSize = props.toSize / 2;
   
-    if (to.x + toSize < from.x + fromSize) {
-      from = props.to;
+    if (toX + toSize < fromX + fromSize) {
+      fromX = props.toX;
+      fromY = props.toY;      
       fromSize = props.toSize / 2;
-      to = props.from;
+      toX = props.fromX;
+      toY = props.fromY;
       toSize = props.fromSize / 2;
     }
-    const len = Math.sqrt(Math.pow((from.x + fromSize) - (to.x + toSize), 2) + Math.pow((from.y + fromSize) - (to.y + toSize), 2));
-    const angle = Math.atan(((to.y + toSize) - (from.y + fromSize)) / ((to.x + toSize) - (from.x + fromSize)));
+    const len = Math.sqrt(Math.pow((fromX + fromSize) - (toX + toSize), 2) + Math.pow((fromY + fromSize) - (toY + toSize), 2));
+    const angle = Math.atan(((toY + toSize) - (fromY + fromSize)) / ((toX + toSize) - (fromX + fromSize)));
 
     const style = {
       position: 'absolute',
-      transform: `translate(${from.x + fromSize - .5 * len * (1 - Math.cos(angle))}px, ${from.y + fromSize + .5 * len * Math.sin(angle)}px) rotate(${angle}rad)`,
+      transform: `translate(${fromX + fromSize - .5 * len * (1 - Math.cos(angle))}px, ${fromY + fromSize + .5 * len * Math.sin(angle)}px) rotate(${angle}rad)`,
       width: `${len}px`,
       height: `${0}px`,
       borderBottom: '2px solid white',

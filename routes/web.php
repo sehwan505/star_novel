@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/boards', 'App\Http\Controllers\BoardController@index');
+Route::post('/boards/link_star', 'App\Http\Controllers\BoardController@link_star');
+Route::post('/boards','App\Http\Controllers\BoardController@store');
+Route::get('/boards/{board}', 'App\Http\Controllers\BoardController@show');
+Route::delete('/boards/{board}', 'App\Http\Controllers\BoardController@destroy');
+
 Route::get('/', function () {
     return view('welcome');
 });
