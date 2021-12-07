@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/detail.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -11,15 +11,16 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import TableContainer from '@material-ui/core/TableContainer';
-import Paper from '@material-ui/core/Paper';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import DeleteIcon from '@material-ui/icons/Delete';
+import HomeIcon from '@material-ui/icons/Home';
+
 
 function Detail({post_id}){
   const [post, setPost] = useState([]);
   const [links, setLinks] = useState([]);
   const history = useHistory();
   const id = post_id.match.params.id;
-  // const post = {'id': 1, 'size': 30, 'location': {'x' : 10, 'y' : 30}, 'links':[{'id' : 2, 'size': 20, 'location' : {'x':40, 'y':20}}, {'id' : 3, 'size': 20,'location':{'x':100, 'y':300}}]};
-
 
   const useStyles = makeStyles(theme => ({
     table: {
@@ -67,12 +68,27 @@ function Detail({post_id}){
     }
   };
 
+  const onLikeClick = () => {
+      axios.post(`http://127.0.0.1:8000/like/${id}/`, {
+      }, {
+        headers: {'Content-Type': 'application/json'}
+      }).then(() => {
+        setPost(prev => ({...prev, size: prev.size + 3}));
+      })
+      .catch((error) => {
+      })
+  }
+
   return (
 	  <>
       <div className="fullscreen">
         <div className="body-wrap">
           <TableContainer>
             <Table className={classes.table}>
+            <colgroup>
+                <col width="80%" />
+                <col width="20%" />
+            </colgroup>
               <TableBody>
               <TableRow>
                 <TableCell className={classes.cell}>
@@ -89,11 +105,14 @@ function Detail({post_id}){
                     </label>
                 </TableCell>
                 <TableCell style={{float:"right"}} className={classes.cell}>
-                  <button onClick={onDeleteClick}>삭제</button>
+                  <DeleteIcon onClick={onDeleteClick} style={{"cursor": "pointer"}}>삭제</DeleteIcon>&nbsp;<HomeIcon style={{"cursor": "pointer"}} onClick={() =>{history.push('/');}}/>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan="2" className={classes.cell}>{post.story}</TableCell>
+                <TableCell className={classes.cell}>{post.story}</TableCell>
+                <TableCell style={{float:"right"}} className={classes.cell}>
+                  <span style={{top:"2px", bottom:"2px"}}>{(post.size - 20) / 3}</span><ThumbUpIcon onClick={onLikeClick} style={{"cursor": "pointer"}}/>
+                </TableCell>
               </TableRow>
               <TableRow>
                 {/* <TableCell colSpan="2">

@@ -23,7 +23,6 @@ class BoardController extends Controller
         /* $board = Board::create(request(['title','stroy])) >>>>
             이렇게 사용할시에는 function store() 이렇게 사용가능
             괄호 안에 Request $request 필요 없음*/
-        info('=== 로그 찍기 ===');
         $area = mt_rand(0, 6);
         $star_info = make_star_location(0, $area, 0, 0, 0);
         $board = Board::create([
@@ -75,5 +74,14 @@ class BoardController extends Controller
         $board->delete();
 
         return redirect('/boards');
+    }
+
+    public function like(Board $board){
+
+        $board->update($param = [
+            'size'=>$board->size + 3
+        ]);
+
+        return response()->json("success", 200);
     }
 }

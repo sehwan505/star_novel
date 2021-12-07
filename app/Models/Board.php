@@ -16,7 +16,8 @@ class Board extends Model
         'y',
         'star_index',
         'area',
-        'shape'
+        'shape',
+        'size',
     ];
 
     protected $casts = [

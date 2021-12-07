@@ -7,10 +7,8 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 function StarButton(props){
     const history = useHistory();
-    const [hover, setHover] = useState(false);
     
     function handleClick(starId) {
-        console.log(starId);
         if (starId !== undefined){
             history.push(`detail/${starId}/`);
         }
@@ -18,7 +16,7 @@ function StarButton(props){
 
     return(
         <> 
-            <Tooltip title={props.title}>
+            <Tooltip title={<h1 style={{ color: "lightblue" }}>{props.title}</h1>}>
             <div onClick={() => {handleClick(props.starId);}}>
                 <FontAwesomeIcon icon={faStar} style={{"backgroundColor": "rgba( 255, 255, 255, 0 )", 
                                    "color":"white",

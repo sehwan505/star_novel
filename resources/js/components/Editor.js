@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { toast } from 'react-toastify';
@@ -9,7 +9,6 @@ import {useHistory} from "react-router-dom";
 const DraftEditor = ({starId}) => {
   const editorRef = React.createRef();
   const [postTitle , setPostTitle] = useState("");
-  const [hashtag, setHashtag] = useState("");
   const history = useHistory();
 
   const onSubmit = (event) => {
@@ -68,13 +67,6 @@ const DraftEditor = ({starId}) => {
     setPostTitle(value);
   }
 
-  const onChangeHashtag = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setHashtag(value);
-  }
-
   return (
     <>
     <div className="editor">
@@ -95,24 +87,18 @@ const DraftEditor = ({starId}) => {
             placeholder="글을 한 마디로 정리해줄 수 있는 제목을 적어주세요." name="title" onChange={onChangeTitle}
             maxLength={40}/>
         </div>
-      <div className="inputbox">
-        <p>해시태그</p>
-        <input className="textbox1" type="text" minlength="5" value={hashtag}
-          placeholder="해시태그 최대 3개 #해시태그" name="title" onChange={onChangeHashtag}
-          maxLength={40}/>
-      </div>
-      </div>
-      <br/><br/>
-      <Editor
-        previewStyle="vertical"
-        height="300px"
-        initialEditType="wysiwyg"
-        placeholder="글쓰기"
-        name="content"
-        hideModeSwitch={true}
-        ref={editorRef}
-      />
-      <span className="submit" onClick={onSubmit}>글쓰기</span>
+        </div>
+        <br/><br/>
+        <Editor
+          previewStyle="vertical"
+          height="300px"
+          initialEditType="wysiwyg"
+          placeholder="글쓰기"
+          name="content"
+          hideModeSwitch={true}
+          ref={editorRef}
+        />
+        <span className="submit" onClick={onSubmit}>글쓰기</span>
     </div>
     </>
   );
