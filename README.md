@@ -5,4 +5,4 @@ php laravel <br>
 react <br>
 
 ### preview
-<img width="80%" src="https://user-images.githubusercontent.com/47601603/152958702-66463aa5-4103-4ab7-8f9f-dcc62630fee2.mp4"/>
+<img width="80%" src="https://user-images.githubusercontent.com/47601603/152971012-062c3d39-3995-4524-9dbc-2a1aded0e858.gif"/>
